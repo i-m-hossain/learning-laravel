@@ -1,0 +1,17 @@
+{
+    "name": "imran/hello-world",
+    "description": "A simple Laravel package",
+    "autoload": {
+      "psr-4": {
+        "Imran\\Test\\": "src/"
+      }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "Imran\\Test\\TestServiceProvider"
+        ]
+      }
+    }
+  }
+  
