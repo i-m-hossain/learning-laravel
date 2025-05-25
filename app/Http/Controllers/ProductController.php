@@ -8,9 +8,21 @@ use Illuminate\Http\Request;
 use App\Events\ProductCreated;
 use App\Events\ProductUpdated;
 use App\Events\ProductDeleted;
+use App\Services\Discount\DiscountCalculator;
+use App\Services\Discount\Factories\DiscountStrategyFactory;
+use App\Services\Discount\Strategies\BuyXGetYDiscountStrategy;
+use App\Services\Discount\Strategies\FixedAmountDiscountStrategy;
+use App\Services\Discount\Strategies\PercentageDiscountStrategy;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
+    private DiscountCalculator $discountCalculator;
+
+    public function __construct(DiscountCalculator $discountCalculator)
+    {
+        $this->discountCalculator = $discountCalculator;
+    }
     /**
      * Display a listing of the products.
      *
@@ -116,4 +128,26 @@ class ProductController extends Controller
             'message' => 'Product deleted successfully'
         ]);
     }
+
+    public function getProductWithDiscount(Request $request, $productId ):JsonResponse
+    {
+        $product =Product::findOrFail($productId);
+        $quantity = $request->input('quantity', 1);
+
+        $promoCode = $request->input('promoCode');
+        $strategy = (new DiscountStrategyFactory())->createFromPromotionCode($promoCode);
+        $discountAmount = $strategy->calculate($product->price);
+        
+        return response()->json([
+            'product' => $product,
+            'original_price' => $product->price,
+            'discount_description' => $this->discountCalculator->getDescription(),
+            'discount_amount' => $discountAmount,
+            'final_price' =>  $product->price- $discountAmount,
+            'quantity' => $quantity,
+            'total' => $discountAmount * $quantity
+        ]);
+    }
+
+    
 }

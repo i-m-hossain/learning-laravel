@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\OrderCreated;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 
 class UpdateInventory implements ShouldQueue
 {
@@ -13,7 +14,7 @@ class UpdateInventory implements ShouldQueue
      */
     public function __construct()
     {
-        //
+        
     }
 
     /**
@@ -23,8 +24,24 @@ class UpdateInventory implements ShouldQueue
     {
         foreach ($event->order->items as $item) {
             $product = $item->product;
-            $product->stock -= $item->quantity;
-            $product->save();
+            
+            // Add validation to prevent negative stock
+            if ($product->stock >= $item->quantity) {
+                $product->stock -= $item->quantity;
+                $product->save();
+                
+                Log::info('Product stock updated', [
+                    'product_id' => $product->id,
+                    'old_stock' => $product->stock + $item->quantity,
+                    'new_stock' => $product->stock
+                ]);
+            } else {
+                Log::warning('Insufficient stock for product', [
+                    'product_id' => $product->id,
+                    'requested' => $item->quantity,
+                    'available' => $product->stock
+                ]);
+            }
         }
     }
 }

@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Order;
 use App\Observers\OrderObserver;
+use App\Services\Discount\DiscountCalculator;
+use App\Services\Discount\Strategies\NoDiscountStrategy;
 use App\Services\LoggerService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\AliasLoader;
@@ -17,6 +19,10 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(LoggerService::class, function ($app) {
             return LoggerService::getInstance();
+        });
+
+        $this->app->bind(DiscountCalculator::class, function ($app) {
+            return new DiscountCalculator(new NoDiscountStrategy());
         });
     }
 

@@ -15,17 +15,16 @@ class SendOrderConfirmationEmail implements ShouldQueue
      */
     public function __construct()
     {
-        //
+        
     }
 
     /**
      * Handle the event.
      */
-    public function handle(OrderCreated $event)
+    public function handle(OrderCreated $event) 
     {
         // Load related items and user for the email
         $order = $event->order->load('items.product', 'user');
-        
         // Send email
         Mail::to($order->user->email)
             ->send(new OrderConfirmation($order));

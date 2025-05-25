@@ -19,6 +19,7 @@ class Order extends Model
         'billing_address',
         'payment_method'
     ];
+    
     protected $dispatchesEvents = [
         'created' => OrderCreated::class,
         'updated' => OrderStatusChanged::class,
