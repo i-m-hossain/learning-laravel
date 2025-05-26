@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Events\OrderStatusChanged;
+use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
@@ -19,7 +20,7 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        $orders = Order::with('orderItems.product')
+        $orders = Order::with('items.product')
             ->where('user_id', $request->user()->id)
             ->get();
 

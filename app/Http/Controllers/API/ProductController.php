@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
@@ -10,9 +10,9 @@ use App\Events\ProductUpdated;
 use App\Events\ProductDeleted;
 use App\Services\Discount\DiscountCalculator;
 use App\Services\Discount\Factories\DiscountStrategyFactory;
-use App\Services\Discount\Strategies\BuyXGetYDiscountStrategy;
-use App\Services\Discount\Strategies\FixedAmountDiscountStrategy;
-use App\Services\Discount\Strategies\PercentageDiscountStrategy;
+// use App\Services\Discount\Strategies\BuyXGetYDiscountStrategy;
+// use App\Services\Discount\Strategies\FixedAmountDiscountStrategy;
+// use App\Services\Discount\Strategies\PercentageDiscountStrategy;
 use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller

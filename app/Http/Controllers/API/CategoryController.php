@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Events\CategoryCreated;
-use App\Events\CategoryUpdated;
-use App\Events\CategoryDeleted;
+// use App\Events\CategoryCreated;
+// use App\Events\CategoryUpdated;
+// use App\Events\CategoryDeleted;
 
 class CategoryController extends Controller
 {
